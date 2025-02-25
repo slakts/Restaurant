@@ -1,14 +1,11 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
-using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -49,10 +46,12 @@ namespace Restaurant.Areas.Identity.Pages.Account
             _roleManager = roleManager;
             _db = db;
         }
+
         [BindProperty]
         public InputModel Input { get; set; }
         public string ReturnUrl { get; set; }
         public IList<AuthenticationScheme> ExternalLogins { get; set; }
+
         public class InputModel
         {
             [Required]
@@ -79,10 +78,7 @@ namespace Restaurant.Areas.Identity.Pages.Account
 
             [Required]
             public string TelefonNo { get; set; }
-
-            public string Role { get; set; }
         }
-
 
         public async Task OnGetAsync(string returnUrl = null)
         {
@@ -94,6 +90,7 @@ namespace Restaurant.Areas.Identity.Pages.Account
         {
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser
@@ -101,8 +98,7 @@ namespace Restaurant.Areas.Identity.Pages.Account
                     UserName = Input.Email,
                     Email = Input.Email,
                     Name = Input.Name,
-                    Surname = Input.Surname,
-                    Role = Input.Role
+                    Surname = Input.Surname
                 };
 
                 var result = await _userManager.CreateAsync(user, Input.Password);
@@ -111,14 +107,13 @@ namespace Restaurant.Areas.Identity.Pages.Account
                 {
                     _logger.LogInformation("Kullanıcı şifre ile yeni bir hesap oluşturdu.");
 
-                    // Rol yoksa oluşturur ve kullanıcıya rol atar.
                     if (!await _roleManager.RoleExistsAsync(Diger.Role_Admin))
                     {
                         await _roleManager.CreateAsync(new IdentityRole(Diger.Role_Admin));
                     }
+
                     await _userManager.AddToRoleAsync(user, Diger.Role_Admin);
 
-                    // E-posta doğrulama bağlantısı oluşturur ve gönderir.
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                     var callbackUrl = Url.Page(
@@ -130,46 +125,26 @@ namespace Restaurant.Areas.Identity.Pages.Account
                     await _emailSender.SendEmailAsync(Input.Email, "E-postanızı onaylayın",
                         $"Lütfen hesabınızı <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>buraya tıklayarak</a> onaylayın.");
 
-                    // E-posta onayı gerekiyorsa, onay sayfasına yönlendirir.
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {
                         return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
                     }
                     else
                     {
-                        // E-posta onayı gerekmiyorsa, kullanıcıyı giriş yaptırır.
                         await _signInManager.SignInAsync(user, isPersistent: false);
                         return LocalRedirect(returnUrl);
                     }
                 }
 
-                // Hata durumunda, hataları model durumuna ekler.
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
 
-            // Model durumu geçersizse, formu tekrar gösterir.
             return Page();
         }
 
-        // Yeni bir ApplicationUser nesnesi oluşturur.
-        private ApplicationUser CreateUser()
-        {
-            try
-            {
-                return Activator.CreateInstance<ApplicationUser>();
-            }
-            catch
-            {
-                throw new InvalidOperationException($"'{nameof(ApplicationUser)}' örneği oluşturulamıyor. " +
-                    $"'{nameof(ApplicationUser)}' soyut bir sınıf olmadığından ve parametresiz bir yapılandırıcıya sahip olduğundan emin olun veya " +
-                    $"/Areas/Identity/Pages/Account/Register.cshtml adresindeki kayıt sayfasını geçersiz kılın.");
-            }
-        }
-
-        // Kullanıcı e-posta depolama alanını alır.
         private IUserEmailStore<ApplicationUser> GetEmailStore()
         {
             if (!_userManager.SupportsUserEmail)

@@ -9,9 +9,21 @@ namespace Restaurant.Email
 {
     public class EmailSender : IEmailSender
     {
+        private readonly EmailOptions _options;
+
+        public EmailSender(IOptions<EmailOptions> emailOptions)
+        {
+            _options = emailOptions.Value ?? throw new ArgumentNullException(nameof(emailOptions), "EmailOptions yapılandırması eksik.");
+        }
+
         public Task SendEmailAsync(string email, string subject, string htmlMessage)
         {
-            var client = new SendGridClient(Options.SendGridKey);
+            if (string.IsNullOrEmpty(_options.SendGridKey))
+            {
+                throw new ArgumentNullException(nameof(_options.SendGridKey), "SendGrid API anahtarı bulunamadı.");
+            }
+
+            var client = new SendGridClient(_options.SendGridKey);
             var mesaj = new SendGridMessage()
             {
                 From = new EmailAddress("aktassila4@gmail.com", "Aktas Cafe"),
@@ -20,21 +32,8 @@ namespace Restaurant.Email
                 HtmlContent = htmlMessage
             };
             mesaj.AddTo(new EmailAddress(email));
-            try
-            {
-                return client.SendEmailAsync(mesaj);
-            }
-            catch (Exception)
-            {
 
-                throw;
-            }
-            return null;
-        }
-        public EmailOptions Options { get; set; }
-        public EmailSender(IOptions<EmailOptions> emailOptions)
-        {
-            Options = emailOptions.Value;
+            return client.SendEmailAsync(mesaj);
         }
     }
 }
