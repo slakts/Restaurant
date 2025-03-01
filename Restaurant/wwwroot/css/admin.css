@@ -1,6 +1,4 @@
-﻿/*=======admin.css======*/
-
-/* Google Fonts: Poppins */
+﻿/* Google Fonts: Poppins */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
 /* Genel Ayarlar */
@@ -18,7 +16,7 @@ html {
 /* Sayfa Stili */
 body {
     font-family: 'Poppins', sans-serif;
-    background-color: #E4E9F7; 
+    background-color: #E4E9F7;
     color: #333;
     margin: 0;
     padding: 0;
@@ -29,9 +27,10 @@ body {
 
 /* Navbar */
 .navbar {
-    background: linear-gradient(135deg, #695CFE, #3A3B3C, #F6F5FF); /* styles.css'deki --primary-color ve --primary-color-light */
+    background: linear-gradient(135deg, #695CFE, #3A3B3C, #F6F5FF); 
     border-bottom: 3px solid #004494;
-    z-index: 1000;
+    z-index: 1; 
+    position: relative;
 }
 
     .navbar .navbar-brand,
@@ -65,13 +64,14 @@ body {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     flex: 1;
     z-index: 1;
+    margin-bottom: 60px;
 }
 
 /* Başlık */
 h1 {
     text-align: center;
     font-size: 24px;
-    color: #695CFE; /* styles.css'deki --primary-color */
+    color: #695CFE; 
 }
 
 /* Tablo */
@@ -85,7 +85,7 @@ h1 {
     margin-top: 20px;
     background: white;
     position: relative;
-    z-index: 10;
+    z-index: 1;
 }
 
     .table th,
@@ -98,7 +98,7 @@ h1 {
     }
 
     .table th {
-        background: #695CFE; /* styles.css'deki --primary-color */
+        background: #695CFE;
         color: white;
         font-weight: bold;
         text-align: center; /* Tablodaki başlıkları ortalar */
@@ -145,11 +145,11 @@ h1 {
 }
 
 .btn-primary {
-    background-color: #695CFE; /* styles.css'deki --primary-color */
+    background-color: #695CFE;
 }
 
     .btn-primary:hover {
-        background-color: #3A3B3C; /* styles.css'deki --primary-color-light */
+        background-color: #3A3B3C;
     }
 
 .btn-lg {
@@ -193,26 +193,22 @@ h1 {
 
 /* Footer */
 .footer {
-    padding: 8px 0;
-    background: linear-gradient(135deg, #695CFE, #3A3B3C);
+    background: #695CFE;
+    color: white;
+    padding: 20px;
     text-align: center;
-    font-size: 12px;
-    color: #ddd;
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
-    margin-top: 20px;
-    opacity: 0.9;
+    font-size: 14px;
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 1;
 }
 
-    .footer:hover {
-        opacity: 1;
+    .footer .footer.text-muted {
+        color: #f8f9fa !important;
     }
 
-    .footer a {
-        color: #cce5ff;
-        text-decoration: none;
-        transition: color 0.3s;
+    .footer.text-muted {
+        color: #f8f9fa !important;
     }
-
-        .footer a:hover {
-            color: #fff;
-        }
