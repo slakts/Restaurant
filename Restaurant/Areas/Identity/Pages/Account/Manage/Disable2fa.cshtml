@@ -10,16 +10,17 @@
 
 <div class="alert alert-warning" role="alert">
     <p>
-        <strong>This action only disables 2FA.</strong>
+        <strong>Bu eylem yalnızca 2FA'yı devre dışı bırakır.</strong>
     </p>
     <p>
-        Disabling 2FA does not change the keys used in authenticator apps. If you wish to change the key
-        used in an authenticator app you should <a asp-page="./ResetAuthenticator">reset your authenticator keys.</a>
+        2FA'yı devre dışı bırakmak, kimlik doğrulayıcı uygulamalarda kullanılan anahtarları değiştirmez. 
+        Kimlik doğrulayıcı uygulamada kullanılan anahtarı değiştirmek istiyorsanız 
+        <a asp-page="./ResetAuthenticator">kimlik doğrulayıcı anahtarlarınızı sıfırlamanız gerekir.</a>
     </p>
 </div>
 
 <div>
     <form method="post">
-        <button class="btn btn-danger" type="submit">Disable 2FA</button>
+        <button class="btn btn-danger" type="submit">2FA'yı devre dışı bırak</button>
     </form>
 </div>

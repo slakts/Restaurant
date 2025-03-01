@@ -1,7 +1,7 @@
 ﻿@page
 @model RegisterConfirmationModel
 @{
-    ViewData["Title"] = "Register confirmation";
+    ViewData["Title"] = "Kayıt Onayı";
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -9,14 +9,14 @@
     if (@Model.DisplayConfirmAccountLink)
     {
         <p>
-            This app does not currently have a real email sender registered, see <a href="https://aka.ms/aspaccountconf">these docs</a> for how to configure a real email sender.
-            Normally this would be emailed: <a id="confirm-link" href="@Model.EmailConfirmationUrl">Click here to confirm your account</a>
+            Bu uygulamanın şu anda kayıtlı gerçek bir e-posta göndereni yoktur. Gerçek bir e-posta göndereni nasıl yapılandıracağınızı görmek için <a href="https://aka.ms/aspaccountconf">bu belgeleri</a> inceleyin.
+            Normalde bu e-posta ile gönderilirdi: <a id="confirm-link" href="@Model.EmailConfirmationUrl">Hesabınızı onaylamak için buraya tıklayın</a>
         </p>
     }
     else
     {
         <p>
-            Please check your email to confirm your account.
+            Hesabınızı onaylamak için lütfen e-postanızı kontrol edin.
         </p>
     }
 }
